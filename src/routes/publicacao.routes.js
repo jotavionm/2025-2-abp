@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 const publicacaoController = require("../controllers/publicacao.controller");
 
 // Configuração do multer para salvar imagens em /uploads
@@ -29,15 +30,18 @@ const upload = multer({
 // Rotas para o CRUD de publicações
 router.post(
   "/",
+  auth,
   upload.single("imagem"),
   publicacaoController.createPublicacao,
 );
 router.get("/", publicacaoController.getAllPublicacoes);
+router.get("/:id", auth, publicacaoController.getPublicacaoById);
 router.put(
   "/:id",
+  auth,
   upload.single("imagem"),
   publicacaoController.updatePublicacao,
 );
-router.delete("/:id", publicacaoController.deletePublicacao);
+router.delete("/:id", auth, publicacaoController.deletePublicacao);
 
 module.exports = router;

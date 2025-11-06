@@ -35,6 +35,24 @@ async function getAllPublicacoes(req, res) {
   }
 }
 
+// Obter uma publicação por ID (uso administrativo)
+async function getPublicacaoById(req, res) {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT * FROM publicacoes WHERE idpublicacao = $1",
+      [id],
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Publicação não encontrada" });
+    }
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar publicação" });
+  }
+}
+
 // Atualizar uma publicação existente
 async function updatePublicacao(req, res) {
   const { id } = req.params;
@@ -98,6 +116,7 @@ async function deletePublicacao(req, res) {
 module.exports = {
   createPublicacao,
   getAllPublicacoes,
+  getPublicacaoById,
   updatePublicacao,
   deletePublicacao,
 };

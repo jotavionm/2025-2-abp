@@ -37,6 +37,24 @@ async function getAllNoticias(req, res) {
   }
 }
 
+// Obter uma notícia por ID (uso administrativo; não filtra por exibir)
+async function getNoticiaById(req, res) {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM noticias WHERE idnoticia = $1',
+      [id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Notícia não encontrada' });
+    }
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar notícia:', error);
+    res.status(500).json({ error: 'Erro ao buscar notícia' });
+  }
+}
+
 // Atualizar uma notícia existente
 async function updateNoticia(req, res) {
   const { id } = req.params;
@@ -105,6 +123,7 @@ async function deleteNoticia(req, res) {
 module.exports = {
   createNoticia,
   getAllNoticias,
+  getNoticiaById,
   updateNoticia,
   deleteNoticia,
 };

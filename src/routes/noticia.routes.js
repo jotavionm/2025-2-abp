@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const auth = require("../middlewares/auth");
 const router = express.Router();
 const noticiaController = require("../controllers/noticia.controller");
 
@@ -27,9 +28,21 @@ const upload = multer({
 });
 
 // Rotas para o CRUD de notícias
-router.post("/", upload.single("imagem"), noticiaController.createNoticia);
+router.post(
+  "/",
+  auth,
+  upload.single("imagem"),
+  noticiaController.createNoticia,
+);
 router.get("/", noticiaController.getAllNoticias);
-router.put("/:id", upload.single("imagem"), noticiaController.updateNoticia);
-router.delete("/:id", noticiaController.deleteNoticia);
+// Detalhe por ID (proteção via auth, para uso no admin)
+router.get("/:id", auth, noticiaController.getNoticiaById);
+router.put(
+  "/:id",
+  auth,
+  upload.single("imagem"),
+  noticiaController.updateNoticia,
+);
+router.delete("/:id", auth, noticiaController.deleteNoticia);
 
 module.exports = router;

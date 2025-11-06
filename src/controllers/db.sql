@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS publicacoes, oportunidades, noticias;
+DROP TABLE IF EXISTS publicacoes, oportunidades, noticias, usuarios;
 
 CREATE TABLE noticias (
   idnoticia SERIAL,
@@ -29,3 +29,12 @@ CREATE TABLE publicacoes (
   PRIMARY KEY(idpublicacao)
 );
 
+CREATE TABLE usuarios (
+  idusuario SERIAL,
+  mail VARCHAR(100) NOT NULL,
+  senha VARCHAR(100) NOT NULL,
+  PRIMARY KEY(idusuario)
+);
+
+INSERT INTO usuarios (mail,senha)
+VALUES ('root@inpe.br','123');
