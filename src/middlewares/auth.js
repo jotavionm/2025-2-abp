@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 function getSecret() {
-  return process.env.JWT_SECRET || "dev-secret-change-me";
+  return process.env.JWT_SECRET || "@1a2w3y9p8q7v6n5z4k@";
 }
 
 function readTokenFromCookie(req) {
