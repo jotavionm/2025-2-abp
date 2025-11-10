@@ -35,6 +35,3 @@ CREATE TABLE usuarios (
   senha VARCHAR(100) NOT NULL,
   PRIMARY KEY(idusuario)
 );
-
-INSERT INTO usuarios (mail,senha)
-VALUES ('root@inpe.br','123');

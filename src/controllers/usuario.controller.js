@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 function getJwtSecret() {
-  return process.env.JWT_SECRET || "dev-secret-change-me";
+  return process.env.JWT_SECRET || "@1a2w3y9p8q7v6n5z4k@";
 }
 
 // Atualiza e-mail e/ou senha do usuário atual a partir do token (req.user)
@@ -70,6 +70,9 @@ async function updateMe(req, res) {
 // Login: verifica mail e senha; retorna dados básicos do usuário.
 async function login(req, res) {
   try {
+
+    console.log("BACKEND (controller): Recebido no req.body:", req.body);
+
     const { mail, senha } = req.body || {};
     if (!mail || !senha) {
       return res.status(400).json({ error: "Informe e-mail e senha" });
@@ -90,6 +93,9 @@ async function login(req, res) {
 
     let ok = false;
     if (isBcrypt) {
+
+      console.log("BACKEND (controller): Comparando com bcrypt..."); // LOG 6
+
       ok = await bcrypt.compare(String(senha), stored);
     } else {
       // Compatibilidade com seed em texto puro
@@ -97,8 +103,13 @@ async function login(req, res) {
     }
 
     if (!ok) {
+
+      console.log("BACKEND (controller): FALHA! Senha não bateu (ok=false).");
+
       return res.status(401).json({ error: "Credenciais inválidas" });
     }
+
+    console.log("BACKEND (controller): SUCESSO! Gerando token.");
 
     const token = jwt.sign(
       { sub: user.idusuario, mail: user.mail },
